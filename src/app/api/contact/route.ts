@@ -45,13 +45,20 @@ export async function POST(request: Request) {
   }
 
   try {
-    await resend.emails.send({
+    const { error } = await resend.emails.send({
       from: FROM_EMAIL,
       to,
       replyTo: email,
       subject: `Message de ${name} — mabelleplanche.fr`,
       react: ContactNotificationEmail({ name, email, message }),
     });
+    if (error) {
+      console.error("[contact] Resend a refusé l'envoi", error);
+      return NextResponse.json(
+        { error: "L'envoi a échoué (configuration email). Réessayez plus tard." },
+        { status: 502 },
+      );
+    }
     return NextResponse.json({ ok: true });
   } catch (err) {
     console.error("[contact] Envoi échoué", err);
