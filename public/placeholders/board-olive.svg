@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200" role="img" aria-label="Planche à découper en olivier (image de démonstration)">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#d9c79a"/>
+      <stop offset="0.5" stop-color="#c3ad78"/>
+      <stop offset="1" stop-color="#a98f57"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="1200" fill="#f4ede1"/>
+  <g transform="translate(600 620)">
+    <rect x="-430" y="-360" width="860" height="720" rx="70" fill="url(#g)"/>
+    <circle cx="0" cy="-270" r="34" fill="#f4ede1"/>
+    <g stroke="#7c6535" stroke-opacity="0.45" fill="none" stroke-width="5">
+      <path d="M-380 -150 C -180 -240, 60 -60, 380 -200"/>
+      <path d="M-360 10 C -120 -70, 120 90, 360 -20"/>
+      <path d="M-380 140 C -160 40, 140 210, 380 110"/>
+      <path d="M-360 250 C -120 190, 180 300, 360 230"/>
+      <path d="M-200 -300 C -120 -120, -180 120, -120 320"/>
+    </g>
+  </g>
+  <text x="600" y="1120" text-anchor="middle" font-family="Georgia, serif" font-size="46" fill="#6b5f52">Olivier — image de démonstration</text>
+</svg>
