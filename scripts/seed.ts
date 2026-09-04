@@ -118,7 +118,7 @@ const essencePlaceholderImage: Record<string, string> = {
   chene: "/placeholders/board-oak.svg",
   noyer: "/placeholders/board-walnut.svg",
   chataignier: "/placeholders/board-chestnut.svg",
-  erable: "/placeholders/board-maple.svg",
+  hetre: "/placeholders/board-beech.svg",
 };
 
 async function run() {
@@ -183,6 +183,12 @@ async function run() {
   const aboutImages = await imageArray(placeholderAbout.images);
 
   const tx = client.transaction();
+
+  // Essences renommées/retirées au fil des corrections : on nettoie l'ancien
+  // document pour ne pas laisser une entrée fantôme dans le Studio.
+  // (essence-erable -> renommée essence-hetre le 2026-09-04)
+  const LEGACY_ESSENCE_IDS = ["essence-erable"];
+  LEGACY_ESSENCE_IDS.forEach((id) => tx.delete(id));
 
   essenceDocs.forEach((doc) => tx.createOrReplace(doc));
   productDocs.forEach((doc) => tx.createOrReplace(doc));

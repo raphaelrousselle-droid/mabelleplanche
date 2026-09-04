@@ -26,7 +26,7 @@ export const metadata: Metadata = {
     template: "%s · Ma belle planche",
   },
   description:
-    "Planches à découper en bois massif, dessinées et fabriquées à la main en France. Chêne, noyer, merisier, olivier. Livraison en France, paiement sécurisé.",
+    "Planches à découper en bois massif, dessinées et fabriquées à la main en France. Chêne, noyer, châtaignier, hêtre. Livraison en France, paiement sécurisé.",
   openGraph: {
     type: "website",
     locale: "fr_FR",

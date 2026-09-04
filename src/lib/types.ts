@@ -7,7 +7,7 @@ export type RichBlock =
   | { style: "h2" | "h3" | "normal"; text: string }
   | { style: "bullets"; items: string[] };
 
-/** Une essence de bois (chêne, noyer, châtaignier, érable...) — page dédiée + choix à la commande. */
+/** Une essence de bois (chêne, noyer, châtaignier, hêtre...) — page dédiée + choix à la commande. */
 export type Essence = {
   id: string;
   slug: string;

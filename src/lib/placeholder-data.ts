@@ -10,7 +10,7 @@ import type {
 /**
  * Données de démonstration servies tant qu'aucun projet Sanity n'est configuré.
  * Tous les textes sont provisoires et destinés à être remplacés. Les 4 essences
- * (chêne, noyer, châtaignier, érable) sont celles réellement travaillées par
+ * (chêne, noyer, châtaignier, hêtre) sont celles réellement travaillées par
  * l'atelier ; les modèles et leurs déclinaisons restent, eux, illustratifs.
  */
 
@@ -81,22 +81,22 @@ export const placeholderEssences: Essence[] = [
     ],
   },
   {
-    id: "essence-erable",
-    slug: "erable",
-    name: "Érable",
-    swatch: "#e6d1a9",
+    id: "essence-hetre",
+    slug: "hetre",
+    name: "Hêtre",
+    swatch: "#e3c9a0",
     shortDescription:
-      "Un bois clair à grain très serré, traditionnellement choisi pour les planches à découper.",
+      "Un bois clair à grain très serré, classique des planches à découper françaises.",
     description: [
       {
         style: "normal",
         text:
-          "L'érable est la référence historique des planches à découper professionnelles : un grain extrêmement serré, une surface lisse et dure qui préserve le tranchant des couteaux, et un bois neutre qui ne transmet aucun goût aux aliments.",
+          "Le hêtre est l'une des essences de référence pour les planches à découper : un grain extrêmement serré, une surface lisse et dure qui préserve le tranchant des couteaux, et un bois neutre qui ne transmet aucun goût aux aliments.",
       },
       {
         style: "normal",
         text:
-          "Sa teinte claire, presque blonde, apporte de la lumière et convient particulièrement aux cuisines contemporaines.",
+          "Très répandu dans les forêts françaises, c'est aussi un bois local et abordable, à la teinte claire légèrement rosée qui apporte de la lumière en cuisine.",
       },
     ],
   },
@@ -186,7 +186,7 @@ export const placeholderProducts: Product[] = [
     title: "Planche Apéro",
     basePrice: 42,
     images: [
-      { url: "/placeholders/board-maple.svg", alt: "Planche Apéro, vue de face" },
+      { url: "/placeholders/board-beech.svg", alt: "Planche Apéro, vue de face" },
       { url: "/placeholders/atelier.svg", alt: "Planche Apéro en situation" },
     ],
     shortDescription:
@@ -201,7 +201,7 @@ export const placeholderProducts: Product[] = [
     dimensions: "30 × 18 × 2 cm",
     care,
     featured: true,
-    variants: withVariants(42, [variant("erable"), variant("noyer")]),
+    variants: withVariants(42, [variant("hetre"), variant("noyer")]),
   },
   {
     id: "planche-comtoise",
@@ -246,7 +246,7 @@ export const placeholderProducts: Product[] = [
     dimensions: "35 × 22 × 2,5 cm",
     care,
     featured: false,
-    variants: withVariants(49, [variant("erable"), variant("chene")]),
+    variants: withVariants(49, [variant("hetre"), variant("chene")]),
   },
   {
     id: "planche-grande-tablee",
