@@ -13,6 +13,7 @@ const bodySchema = z.object({
     .array(
       z.object({
         productId: z.string().min(1),
+        essenceSlug: z.string().min(1),
         quantity: z.number().int().min(1).max(20),
       }),
     )
@@ -42,7 +43,7 @@ export async function POST(request: Request) {
     process.env.NEXT_PUBLIC_SITE_URL ||
     "http://localhost:3000";
 
-  // Source de vérité : on recharge chaque produit côté serveur.
+  // Source de vérité : on recharge chaque produit et sa déclinaison (essence) côté serveur.
   const lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = [];
   let merchandiseTotal = 0;
 
@@ -50,33 +51,43 @@ export async function POST(request: Request) {
     const product = await getProductById(entry.productId);
     if (!product) {
       return NextResponse.json(
-        { error: `Une planche de votre panier n'est plus disponible.` },
-        { status: 409 },
-      );
-    }
-    if (!product.inStock) {
-      return NextResponse.json(
-        { error: `« ${product.title} » est épuisée. Retirez-la du panier pour continuer.` },
+        { error: "Une planche de votre panier n'est plus disponible." },
         { status: 409 },
       );
     }
 
-    const image = product.images[0]?.url;
+    const variant = product.variants.find((v) => v.essenceSlug === entry.essenceSlug);
+    if (!variant) {
+      return NextResponse.json(
+        { error: `« ${product.title} » n'est plus disponible dans cette essence.` },
+        { status: 409 },
+      );
+    }
+    if (!variant.inStock) {
+      return NextResponse.json(
+        {
+          error: `« ${product.title} » (${variant.essenceName}) est épuisée. Retirez-la du panier pour continuer.`,
+        },
+        { status: 409 },
+      );
+    }
+
+    const image = variant.images[0]?.url ?? product.images[0]?.url;
     const absoluteImage = image?.startsWith("http") ? image : image ? `${origin}${image}` : undefined;
 
     lineItems.push({
       quantity: entry.quantity,
       price_data: {
         currency: "eur",
-        unit_amount: toCents(product.price),
+        unit_amount: toCents(variant.price),
         product_data: {
-          name: product.title,
+          name: `${product.title} — ${variant.essenceName}`,
           images: absoluteImage ? [absoluteImage] : undefined,
-          metadata: { productId: product.id },
+          metadata: { productId: product.id, essenceSlug: variant.essenceSlug },
         },
       },
     });
-    merchandiseTotal += product.price * entry.quantity;
+    merchandiseTotal += variant.price * entry.quantity;
   }
 
   const { shipping } = settings;
@@ -114,7 +125,7 @@ export async function POST(request: Request) {
       cancel_url: `${origin}/panier`,
       metadata: {
         cart: parsed.data.items
-          .map((i) => `${i.productId}x${i.quantity}`)
+          .map((i) => `${i.productId}/${i.essenceSlug}x${i.quantity}`)
           .join(","),
       },
     });

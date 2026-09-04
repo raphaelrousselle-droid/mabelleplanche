@@ -8,6 +8,9 @@ export const structure: StructureResolver = (S) =>
       S.listItem()
         .title("Planches")
         .child(S.documentTypeList("product").title("Planches")),
+      S.listItem()
+        .title("Essences de bois")
+        .child(S.documentTypeList("essence").title("Essences de bois")),
       S.divider(),
       S.listItem()
         .title("Réglages du site")

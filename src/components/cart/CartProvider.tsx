@@ -9,16 +9,23 @@ import {
   useState,
 } from "react";
 
-const STORAGE_KEY = "mbp-cart";
+const STORAGE_KEY = "mbp-cart-v2";
 
 export type CartItem = {
   productId: string;
   slug: string;
   title: string;
+  essenceSlug: string;
+  essenceName: string;
   price: number;
   image?: string;
   quantity: number;
 };
+
+/** Identifiant de ligne : un même modèle dans deux essences = deux lignes distinctes. */
+function lineId(productId: string, essenceSlug: string) {
+  return `${productId}::${essenceSlug}`;
+}
 
 type CartContextValue = {
   items: CartItem[];
@@ -26,8 +33,8 @@ type CartContextValue = {
   subtotal: number;
   ready: boolean;
   addItem: (item: Omit<CartItem, "quantity">, quantity?: number) => void;
-  removeItem: (productId: string) => void;
-  updateQuantity: (productId: string, quantity: number) => void;
+  removeItem: (productId: string, essenceSlug: string) => void;
+  updateQuantity: (productId: string, essenceSlug: string, quantity: number) => void;
   clear: () => void;
 };
 
@@ -47,6 +54,7 @@ function readStorage(): CartItem[] {
         (i): i is CartItem =>
           i &&
           typeof i.productId === "string" &&
+          typeof i.essenceSlug === "string" &&
           typeof i.price === "number" &&
           typeof i.quantity === "number",
       )
@@ -77,10 +85,11 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const addItem = useCallback(
     (item: Omit<CartItem, "quantity">, quantity = 1) => {
       setItems((prev) => {
-        const existing = prev.find((i) => i.productId === item.productId);
+        const id = lineId(item.productId, item.essenceSlug);
+        const existing = prev.find((i) => lineId(i.productId, i.essenceSlug) === id);
         if (existing) {
           return prev.map((i) =>
-            i.productId === item.productId
+            lineId(i.productId, i.essenceSlug) === id
               ? { ...i, quantity: Math.min(i.quantity + quantity, MAX_QTY) }
               : i,
           );
@@ -91,19 +100,24 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     [],
   );
 
-  const removeItem = useCallback((productId: string) => {
-    setItems((prev) => prev.filter((i) => i.productId !== productId));
+  const removeItem = useCallback((productId: string, essenceSlug: string) => {
+    const id = lineId(productId, essenceSlug);
+    setItems((prev) => prev.filter((i) => lineId(i.productId, i.essenceSlug) !== id));
   }, []);
 
-  const updateQuantity = useCallback((productId: string, quantity: number) => {
-    setItems((prev) =>
-      prev.flatMap((i) => {
-        if (i.productId !== productId) return [i];
-        const q = Math.min(Math.max(1, Math.round(quantity)), MAX_QTY);
-        return [{ ...i, quantity: q }];
-      }),
-    );
-  }, []);
+  const updateQuantity = useCallback(
+    (productId: string, essenceSlug: string, quantity: number) => {
+      const id = lineId(productId, essenceSlug);
+      setItems((prev) =>
+        prev.flatMap((i) => {
+          if (lineId(i.productId, i.essenceSlug) !== id) return [i];
+          const q = Math.min(Math.max(1, Math.round(quantity)), MAX_QTY);
+          return [{ ...i, quantity: q }];
+        }),
+      );
+    },
+    [],
+  );
 
   const clear = useCallback(() => setItems([]), []);
 

@@ -2,6 +2,7 @@ import "server-only";
 
 import {
   placeholderAbout,
+  placeholderEssences,
   placeholderLegalPages,
   placeholderProducts,
   placeholderSettings,
@@ -11,6 +12,7 @@ import { isSanityConfigured } from "./sanity/env";
 import { portableTextToRichBlocks } from "./sanity/portable-text";
 import {
   aboutQuery,
+  allEssencesQuery,
   allProductsQuery,
   featuredProductsQuery,
   legalPageQuery,
@@ -20,6 +22,7 @@ import {
 } from "./sanity/queries";
 import type {
   AboutContent,
+  Essence,
   LegalPage,
   LegalPageSlug,
   Product,
@@ -29,16 +32,32 @@ import type {
 const REVALIDATE_SECONDS = 60;
 
 type RawProduct = Omit<Product, "description"> & { description?: unknown };
+type RawEssence = Omit<Essence, "description"> & { description?: unknown };
 
 function normalizeProduct(raw: RawProduct): Product {
   return {
     ...raw,
     images: (raw.images ?? []).filter((img) => Boolean(img?.url)),
+    variants: (raw.variants ?? []).map((v) => ({
+      ...v,
+      images: (v.images ?? []).filter((img) => Boolean(img?.url)),
+    })),
     description: Array.isArray(raw.description)
       ? // Vient du CMS (Portable Text) ou déjà au bon format (démo)
         raw.description.some((b) => b && typeof b === "object" && "_type" in b)
         ? portableTextToRichBlocks(raw.description)
         : (raw.description as Product["description"])
+      : [],
+  };
+}
+
+function normalizeEssence(raw: RawEssence): Essence {
+  return {
+    ...raw,
+    description: Array.isArray(raw.description)
+      ? raw.description.some((b) => b && typeof b === "object" && "_type" in b)
+        ? portableTextToRichBlocks(raw.description)
+        : (raw.description as Essence["description"])
       : [],
   };
 }
@@ -50,8 +69,8 @@ async function sanityFetch<T>(query: string, params: Record<string, unknown> = {
 }
 
 /**
- * Sécurité : si Sanity est configuré mais qu'aucune planche n'a encore été
- * publiée (dataset pas encore alimenté par `npm run seed` ou par le Studio),
+ * Sécurité : si Sanity est configuré mais qu'aucun contenu n'a encore été
+ * publié (dataset pas encore alimenté par `npm run seed` ou par le Studio),
  * on retombe sur les données de démonstration au lieu d'afficher une boutique
  * vide. Un avertissement est journalisé pour ne pas masquer un vrai problème.
  */
@@ -104,6 +123,12 @@ export async function getProductById(id: string): Promise<Product | null> {
   }
   const data = await sanityFetch<RawProduct | null>(productByIdQuery, { id });
   return data ? normalizeProduct(data) : null;
+}
+
+export async function getEssences(): Promise<Essence[]> {
+  if (!isSanityConfigured) return placeholderEssences;
+  const data = await sanityFetch<RawEssence[]>(allEssencesQuery);
+  return fallbackIfEmpty(data?.map(normalizeEssence), placeholderEssences, "essences");
 }
 
 export async function getSiteSettings(): Promise<SiteSettings> {

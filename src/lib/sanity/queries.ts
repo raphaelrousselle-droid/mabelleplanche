@@ -1,17 +1,25 @@
 import { groq } from "next-sanity";
 
+const variantFields = groq`
+  "essenceSlug": essence->slug.current,
+  "essenceName": essence->name,
+  "swatch": essence->swatch,
+  "price": coalesce(priceOverride, ^.basePrice),
+  "inStock": coalesce(inStock, true),
+  "images": images[]{ "url": asset->url, "alt": coalesce(alt, "") }
+`;
+
 const productFields = groq`
   "id": _id,
   "slug": slug.current,
   title,
-  price,
+  basePrice,
   "images": images[]{ "url": asset->url, "alt": coalesce(alt, "") },
+  "variants": variants[]{ ${variantFields} },
   shortDescription,
   description,
   dimensions,
-  woodEssence,
   care,
-  "inStock": coalesce(inStock, true),
   "featured": coalesce(featured, false)
 `;
 
@@ -36,6 +44,18 @@ export const productBySlugQuery = groq`
 export const productByIdQuery = groq`
   *[_type == "product" && _id == $id][0] {
     ${productFields}
+  }
+`;
+
+export const allEssencesQuery = groq`
+  *[_type == "essence"] | order(name asc) {
+    "id": _id,
+    "slug": slug.current,
+    name,
+    swatch,
+    shortDescription,
+    description,
+    "image": image{ "url": asset->url, "alt": coalesce(alt, "") }
   }
 `;
 
