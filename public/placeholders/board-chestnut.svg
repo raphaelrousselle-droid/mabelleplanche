@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200" role="img" aria-label="Bois de châtaignier (image de démonstration)">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#c99a5e"/>
+      <stop offset="0.5" stop-color="#b17f43"/>
+      <stop offset="1" stop-color="#8f632f"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="1200" fill="#f4ede1"/>
+  <g transform="translate(600 620)">
+    <rect x="-430" y="-360" width="860" height="720" rx="70" fill="url(#g)"/>
+    <circle cx="0" cy="-270" r="34" fill="#f4ede1"/>
+    <g stroke="#6d4a24" stroke-opacity="0.4" fill="none" stroke-width="6">
+      <path d="M-380 -180 C -160 -260, 100 -80, 380 -190"/>
+      <path d="M-370 -30 C -110 -100, 150 30, 370 -40"/>
+      <path d="M-380 110 C -150 30, 130 190, 380 100"/>
+      <path d="M-370 240 C -110 170, 170 300, 370 220"/>
+    </g>
+  </g>
+  <text x="600" y="1120" text-anchor="middle" font-family="Georgia, serif" font-size="46" fill="#6b5f52">Châtaignier — image de démonstration</text>
+</svg>

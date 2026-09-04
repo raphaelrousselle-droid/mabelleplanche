@@ -7,7 +7,7 @@ export const product = defineType({
   fields: [
     defineField({
       name: "title",
-      title: "Nom",
+      title: "Nom du modèle",
       type: "string",
       validation: (rule) => rule.required(),
     }),
@@ -19,30 +19,31 @@ export const product = defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
-      name: "price",
-      title: "Prix (€ TTC)",
+      name: "basePrice",
+      title: "Prix de base (€ TTC)",
       type: "number",
+      description: "Utilisé pour les essences qui n'ont pas de prix propre.",
       validation: (rule) => rule.required().positive(),
     }),
     defineField({
       name: "images",
-      title: "Photos (plusieurs angles)",
+      title: "Photos générales du modèle",
       type: "array",
       of: [
         {
           type: "image",
           options: { hotspot: true },
-          fields: [
-            {
-              name: "alt",
-              title: "Texte alternatif",
-              type: "string",
-              description: "Description de l'image pour l'accessibilité et le SEO.",
-            },
-          ],
+          fields: [{ name: "alt", title: "Texte alternatif", type: "string" }],
         },
       ],
       validation: (rule) => rule.min(1),
+    }),
+    defineField({
+      name: "variants",
+      title: "Essences disponibles",
+      type: "array",
+      of: [{ type: "productVariant" }],
+      validation: (rule) => rule.min(1).error("Au moins une essence doit être proposée."),
     }),
     defineField({
       name: "shortDescription",
@@ -55,11 +56,18 @@ export const product = defineType({
       name: "description",
       title: "Description détaillée",
       type: "array",
-      of: [{ type: "block", styles: [
-        { title: "Normal", value: "normal" },
-        { title: "Titre", value: "h2" },
-        { title: "Sous-titre", value: "h3" },
-      ], lists: [{ title: "Puces", value: "bullet" }], marks: { decorators: [] } }],
+      of: [
+        {
+          type: "block",
+          styles: [
+            { title: "Normal", value: "normal" },
+            { title: "Titre", value: "h2" },
+            { title: "Sous-titre", value: "h3" },
+          ],
+          lists: [{ title: "Puces", value: "bullet" }],
+          marks: { decorators: [] },
+        },
+      ],
     }),
     defineField({
       name: "dimensions",
@@ -69,24 +77,11 @@ export const product = defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
-      name: "woodEssence",
-      title: "Essence de bois",
-      type: "string",
-      validation: (rule) => rule.required(),
-    }),
-    defineField({
       name: "care",
       title: "Entretien",
       type: "text",
       rows: 4,
       validation: (rule) => rule.required(),
-    }),
-    defineField({
-      name: "inStock",
-      title: "En stock",
-      type: "boolean",
-      description: "Décochez pour afficher « Épuisé » et empêcher l'ajout au panier.",
-      initialValue: true,
     }),
     defineField({
       name: "featured",
@@ -102,11 +97,12 @@ export const product = defineType({
     }),
   ],
   preview: {
-    select: { title: "title", media: "images.0", price: "price", inStock: "inStock" },
-    prepare({ title, media, price, inStock }) {
+    select: { title: "title", media: "images.0", price: "basePrice", variants: "variants" },
+    prepare({ title, media, price, variants }) {
+      const count = Array.isArray(variants) ? variants.length : 0;
       return {
         title,
-        subtitle: `${price ? `${price} €` : "—"}${inStock === false ? " · Épuisé" : ""}`,
+        subtitle: `${price ? `à partir de ${price} €` : "—"} · ${count} essence${count > 1 ? "s" : ""}`,
         media,
       };
     },

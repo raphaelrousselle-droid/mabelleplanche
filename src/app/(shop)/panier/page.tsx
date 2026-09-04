@@ -20,7 +20,11 @@ export default function CartPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          items: items.map((i) => ({ productId: i.productId, quantity: i.quantity })),
+          items: items.map((i) => ({
+            productId: i.productId,
+            essenceSlug: i.essenceSlug,
+            quantity: i.quantity,
+          })),
         }),
       });
       const data = await res.json();
@@ -65,7 +69,7 @@ export default function CartPage() {
       <div className="mt-10 grid gap-12 lg:grid-cols-[1.6fr_1fr]">
         <ul className="divide-y divide-bordure border-y border-bordure">
           {items.map((item) => (
-            <li key={item.productId} className="flex gap-5 py-6">
+            <li key={`${item.productId}::${item.essenceSlug}`} className="flex gap-5 py-6">
               <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-xl bg-creme">
                 {item.image && (
                   <Image
@@ -80,12 +84,15 @@ export default function CartPage() {
 
               <div className="flex flex-1 flex-col">
                 <div className="flex items-start justify-between gap-4">
-                  <Link
-                    href={`/planches/${item.slug}`}
-                    className="font-serif text-lg text-ecorce link-underline"
-                  >
-                    {item.title}
-                  </Link>
+                  <div>
+                    <Link
+                      href={`/planches/${item.slug}`}
+                      className="font-serif text-lg text-ecorce link-underline"
+                    >
+                      {item.title}
+                    </Link>
+                    <p className="mt-0.5 text-sm text-brou">{item.essenceName}</p>
+                  </div>
                   <span className="font-serif tabular-nums text-ecorce">
                     {formatEuros(item.price * item.quantity)}
                   </span>
@@ -99,7 +106,9 @@ export default function CartPage() {
                     <button
                       type="button"
                       aria-label="Diminuer la quantité"
-                      onClick={() => updateQuantity(item.productId, item.quantity - 1)}
+                      onClick={() =>
+                        updateQuantity(item.productId, item.essenceSlug, item.quantity - 1)
+                      }
                       className="h-9 w-9 text-lg text-brou transition-colors hover:text-ecorce"
                     >
                       −
@@ -110,7 +119,9 @@ export default function CartPage() {
                     <button
                       type="button"
                       aria-label="Augmenter la quantité"
-                      onClick={() => updateQuantity(item.productId, item.quantity + 1)}
+                      onClick={() =>
+                        updateQuantity(item.productId, item.essenceSlug, item.quantity + 1)
+                      }
                       className="h-9 w-9 text-lg text-brou transition-colors hover:text-ecorce"
                     >
                       +
@@ -118,7 +129,7 @@ export default function CartPage() {
                   </div>
                   <button
                     type="button"
-                    onClick={() => removeItem(item.productId)}
+                    onClick={() => removeItem(item.productId, item.essenceSlug)}
                     className="text-[0.72rem] font-semibold uppercase tracking-[0.12em] text-brou link-underline"
                   >
                     Retirer

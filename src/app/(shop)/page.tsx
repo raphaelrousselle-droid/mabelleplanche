@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { ProductCard } from "@/components/ProductCard";
-import { getFeaturedProducts, getSiteSettings } from "@/lib/store";
+import { getEssences, getFeaturedProducts, getSiteSettings } from "@/lib/store";
 
 const STEPS = [
   {
@@ -20,14 +20,11 @@ const STEPS = [
 ];
 
 export default async function HomePage() {
-  const [featured, settings] = await Promise.all([
+  const [featured, settings, essences] = await Promise.all([
     getFeaturedProducts(),
     getSiteSettings(),
+    getEssences(),
   ]);
-
-  const essences = Array.from(
-    new Set(featured.map((p) => p.woodEssence.split(" ")[0])),
-  );
 
   return (
     <div>
@@ -130,18 +127,26 @@ export default async function HomePage() {
           </div>
 
           {essences.length > 0 && (
-            <div className="mt-16 flex flex-wrap items-center gap-x-3 gap-y-2 border-t border-foret-clair/15 pt-8 text-foret-clair/80">
-              <span className="mr-2 text-[0.7rem] font-semibold uppercase tracking-[0.16em] text-foret-clair/50">
+            <div className="mt-16 border-t border-foret-clair/15 pt-8">
+              <span className="text-[0.7rem] font-semibold uppercase tracking-[0.16em] text-foret-clair/50">
                 Essences travaillées
               </span>
-              {essences.map((e) => (
-                <span
-                  key={e}
-                  className="rounded-full border border-foret-clair/25 px-3.5 py-1 text-sm"
-                >
-                  {e}
-                </span>
-              ))}
+              <div className="mt-4 flex flex-wrap gap-3">
+                {essences.map((e) => (
+                  <Link
+                    key={e.slug}
+                    href={`/essences#${e.slug}`}
+                    className="inline-flex items-center gap-2 rounded-full border border-foret-clair/25 px-3.5 py-1.5 text-sm text-foret-clair/85 transition-colors hover:border-foret-clair/60"
+                  >
+                    <span
+                      className="h-2.5 w-2.5 rounded-full border border-white/20"
+                      style={{ backgroundColor: e.swatch }}
+                      aria-hidden
+                    />
+                    {e.name}
+                  </Link>
+                ))}
+              </div>
             </div>
           )}
         </div>

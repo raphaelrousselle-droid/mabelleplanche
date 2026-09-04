@@ -1,13 +1,15 @@
 /**
- * Remplit un dataset Sanity avec les données de démonstration
- * (6 planches, réglages du site, page « À propos », 3 pages légales).
+ * Remplit un dataset Sanity avec les données de démonstration : 4 essences de
+ * bois, 6 modèles de planches (avec leurs déclinaisons par essence), réglages
+ * du site, page « À propos » et 3 pages légales.
  *
  *   npm run seed          # lit .env.local
  *
- * Les images de démonstration (SVG dans /public/placeholders) sont importées
- * pour que la boutique soit présentable immédiatement. Remplacez-les par vos
- * photos depuis le Studio (/studio). Relancer le script met à jour les
- * documents de démo (mêmes _id) sans toucher à ce que vous avez ajouté.
+ * Les photos de démonstration (SVG dans /public/placeholders, photos réelles
+ * de l'atelier dans /public/photos) sont importées pour que la boutique soit
+ * présentable immédiatement. Remplacez-les depuis le Studio (/studio).
+ * Relancer le script met à jour les documents de démo (mêmes _id) sans
+ * toucher à ce que vous avez ajouté à la main.
  */
 import { readFile } from "node:fs/promises";
 import path from "node:path";
@@ -16,6 +18,7 @@ import { createClient } from "@sanity/client";
 
 import {
   placeholderAbout,
+  placeholderEssences,
   placeholderLegalPages,
   placeholderProducts,
   placeholderSettings,
@@ -110,26 +113,64 @@ async function imageArray(images: { url: string; alt: string }[]) {
   return out;
 }
 
+/** Une image de démonstration par essence, pour illustrer la page /essences. */
+const essencePlaceholderImage: Record<string, string> = {
+  chene: "/placeholders/board-oak.svg",
+  noyer: "/placeholders/board-walnut.svg",
+  chataignier: "/placeholders/board-chestnut.svg",
+  erable: "/placeholders/board-maple.svg",
+};
+
 async function run() {
   console.log("Import des images de démonstration…");
 
+  // --- Essences (créées d'abord : les modèles les référencent) ---
+  const essenceDocs = [];
+  for (const e of placeholderEssences) {
+    const imgPath = essencePlaceholderImage[e.slug];
+    const assetId = imgPath ? await uploadPublicImage(imgPath) : null;
+    essenceDocs.push({
+      // NB : un _id Sanity ne doit pas contenir de point.
+      _id: e.id,
+      _type: "essence",
+      name: e.name,
+      slug: { _type: "slug", current: e.slug },
+      swatch: e.swatch,
+      shortDescription: e.shortDescription,
+      description: toPortableText(e.description),
+      ...(assetId
+        ? { image: { _type: "image", asset: { _type: "reference", _ref: assetId } } }
+        : {}),
+    });
+  }
+
+  // --- Modèles de planches ---
   const productDocs = [];
   for (let i = 0; i < placeholderProducts.length; i++) {
     const p = placeholderProducts[i];
+    const variants = [];
+    for (const v of p.variants) {
+      variants.push({
+        _type: "productVariant",
+        _key: key(),
+        essence: { _type: "reference", _ref: `essence-${v.essenceSlug}` },
+        ...(v.price !== p.basePrice ? { priceOverride: v.price } : {}),
+        inStock: v.inStock,
+        images: await imageArray(v.images),
+      });
+    }
     productDocs.push({
-      // NB : un _id Sanity ne doit pas contenir de point.
       _id: p.id,
       _type: "product",
       title: p.title,
       slug: { _type: "slug", current: p.slug },
-      price: p.price,
+      basePrice: p.basePrice,
       images: await imageArray(p.images),
+      variants,
       shortDescription: p.shortDescription,
       description: toPortableText(p.description),
       dimensions: p.dimensions,
-      woodEssence: p.woodEssence,
       care: p.care,
-      inStock: p.inStock,
       featured: p.featured,
       orderRank: String(i).padStart(4, "0"),
     });
@@ -143,6 +184,7 @@ async function run() {
 
   const tx = client.transaction();
 
+  essenceDocs.forEach((doc) => tx.createOrReplace(doc));
   productDocs.forEach((doc) => tx.createOrReplace(doc));
 
   tx.createOrReplace({

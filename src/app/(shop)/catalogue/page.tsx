@@ -11,8 +11,9 @@ export const metadata: Metadata = {
 
 export default async function CataloguePage() {
   const products = await getProducts();
-  const available = products.filter((p) => p.inStock);
-  const soldOut = products.filter((p) => !p.inStock);
+  const inStock = (p: (typeof products)[number]) => p.variants.some((v) => v.inStock);
+  const available = products.filter(inStock);
+  const soldOut = products.filter((p) => !inStock(p));
 
   return (
     <div className="wrap py-14 lg:py-20">

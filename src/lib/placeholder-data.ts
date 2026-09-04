@@ -1,8 +1,17 @@
-import type { AboutContent, LegalPage, Product, SiteSettings } from "./types";
+import type {
+  AboutContent,
+  Essence,
+  LegalPage,
+  Product,
+  ProductVariant,
+  SiteSettings,
+} from "./types";
 
 /**
  * Données de démonstration servies tant qu'aucun projet Sanity n'est configuré.
- * Tous les textes et images sont provisoires et destinés à être remplacés.
+ * Tous les textes sont provisoires et destinés à être remplacés. Les 4 essences
+ * (chêne, noyer, châtaignier, érable) sont celles réellement travaillées par
+ * l'atelier ; les modèles et leurs déclinaisons restent, eux, illustratifs.
  */
 
 const care =
@@ -10,153 +19,246 @@ const care =
   "Nourrissez le bois une fois par mois avec une huile alimentaire (huile de lin cuite ou huile minérale de qualité alimentaire). " +
   "Ne la passez jamais au lave-vaisselle et ne la laissez pas tremper.";
 
+export const placeholderEssences: Essence[] = [
+  {
+    id: "essence-chene",
+    slug: "chene",
+    name: "Chêne",
+    swatch: "#b0794f",
+    shortDescription:
+      "Un bois dense au fil prononcé, référence intemporelle de la menuiserie française.",
+    description: [
+      {
+        style: "normal",
+        text:
+          "Le chêne est le bois de la robustesse : dense, résistant aux chocs, il traverse les décennies sans faiblir. Son grain marqué, en veines longues et régulières, donne à chaque planche un caractère affirmé.",
+      },
+      {
+        style: "normal",
+        text:
+          "C'est une essence locale par excellence, issue de forêts françaises gérées durablement — un choix évident pour un objet fait pour durer.",
+      },
+    ],
+  },
+  {
+    id: "essence-noyer",
+    slug: "noyer",
+    name: "Noyer",
+    swatch: "#5f3f28",
+    shortDescription:
+      "Un bois sombre et élégant, au grain fin, qui se patine magnifiquement avec le temps.",
+    description: [
+      {
+        style: "normal",
+        text:
+          "Le noyer se distingue par sa teinte brun chocolat profonde, parcourue de veines plus claires. C'est un bois noble, souvent réservé aux pièces de service ou aux planches destinées à trôner sur la table.",
+      },
+      {
+        style: "normal",
+        text:
+          "Plus tendre que le chêne, il se travaille finement et prend, à l'usage, une patine chaude qui s'approfondit d'année en année.",
+      },
+    ],
+  },
+  {
+    id: "essence-chataignier",
+    slug: "chataignier",
+    name: "Châtaignier",
+    swatch: "#a97a3f",
+    shortDescription:
+      "Proche du chêne en résistance, plus léger, naturellement peu sensible à l'humidité.",
+    description: [
+      {
+        style: "normal",
+        text:
+          "Cousin du chêne, le châtaignier partage sa résistance mais avec une teinte plus dorée et un poids plus léger en main. Sa richesse en tanins le rend naturellement peu sensible à l'humidité.",
+      },
+      {
+        style: "normal",
+        text:
+          "Une essence discrète mais généreuse, appréciée pour son fil régulier et sa couleur chaleureuse qui s'accorde avec tous les intérieurs.",
+      },
+    ],
+  },
+  {
+    id: "essence-erable",
+    slug: "erable",
+    name: "Érable",
+    swatch: "#e6d1a9",
+    shortDescription:
+      "Un bois clair à grain très serré, traditionnellement choisi pour les planches à découper.",
+    description: [
+      {
+        style: "normal",
+        text:
+          "L'érable est la référence historique des planches à découper professionnelles : un grain extrêmement serré, une surface lisse et dure qui préserve le tranchant des couteaux, et un bois neutre qui ne transmet aucun goût aux aliments.",
+      },
+      {
+        style: "normal",
+        text:
+          "Sa teinte claire, presque blonde, apporte de la lumière et convient particulièrement aux cuisines contemporaines.",
+      },
+    ],
+  },
+];
+
+function essenceRef(slug: string) {
+  const e = placeholderEssences.find((x) => x.slug === slug);
+  if (!e) throw new Error(`Essence inconnue: ${slug}`);
+  return e;
+}
+
+/** Construit les déclinaisons d'un modèle. Sans `price`, le prix suit `basePrice` du modèle. */
+function variant(
+  essenceSlug: string,
+  opts: { inStock?: boolean; price?: number; images?: ProductVariant["images"] } = {},
+): Omit<ProductVariant, "price"> & { price?: number } {
+  const e = essenceRef(essenceSlug);
+  return {
+    essenceSlug: e.slug,
+    essenceName: e.name,
+    swatch: e.swatch,
+    inStock: opts.inStock ?? true,
+    images: opts.images ?? [],
+    price: opts.price,
+  };
+}
+
+function withVariants(basePrice: number, variants: ReturnType<typeof variant>[]): ProductVariant[] {
+  return variants.map((v) => ({ ...v, price: v.price ?? basePrice }));
+}
+
 export const placeholderProducts: Product[] = [
   {
     id: "planche-bistrot",
-    slug: "planche-bistrot-chene",
-    title: "Planche Bistrot — Chêne",
-    price: 69,
+    slug: "planche-bistrot",
+    title: "Planche Bistrot",
+    basePrice: 69,
     images: [
-      { url: "/placeholders/board-oak.svg", alt: "Planche Bistrot en chêne, vue de face" },
+      { url: "/placeholders/board-oak.svg", alt: "Planche Bistrot, vue de face" },
       { url: "/placeholders/atelier.svg", alt: "Planche Bistrot en situation dans l'atelier" },
     ],
     shortDescription:
-      "La planche du quotidien : format rectangulaire, chêne massif huilé, une prise en main facile.",
+      "La planche du quotidien : format rectangulaire, une prise en main facile.",
     description: [
       {
         style: "normal",
         text:
-          "Taillée dans une planche de chêne français massif, la Bistrot accompagne tous les gestes de la cuisine : pain du matin, herbes, fromages, découpe des légumes.",
+          "La Bistrot accompagne tous les gestes de la cuisine : pain du matin, herbes, fromages, découpe des légumes.",
       },
       {
         style: "normal",
         text:
-          "Chaque pièce est rabotée, poncée à la main en plusieurs passes puis nourrie à l'huile de lin. Le fil du bois et les nuances sont uniques à chaque planche.",
+          "Chaque pièce est rabotée, poncée à la main en plusieurs passes puis nourrie à l'huile. Le fil du bois et les nuances sont uniques à chaque planche.",
       },
     ],
     dimensions: "40 × 25 × 3 cm",
-    woodEssence: "Chêne massif (France)",
     care,
-    inStock: true,
     featured: true,
+    variants: withVariants(69, [variant("chene"), variant("chataignier")]),
   },
   {
     id: "planche-service",
-    slug: "planche-service-noyer",
-    title: "Planche de Service — Noyer",
-    price: 95,
+    slug: "planche-service",
+    title: "Planche de Service",
+    basePrice: 95,
     images: [
-      { url: "/placeholders/board-walnut.svg", alt: "Planche de Service en noyer, vue de face" },
-      { url: "/placeholders/atelier.svg", alt: "Planche de Service en noyer en situation" },
+      { url: "/placeholders/board-walnut.svg", alt: "Planche de Service, vue de face" },
+      { url: "/placeholders/atelier.svg", alt: "Planche de Service en situation" },
     ],
     shortDescription:
-      "Grand plateau en noyer avec rigole périphérique, pensé pour la découpe des viandes et le service à table.",
+      "Grand plateau avec rigole périphérique, pensé pour la découpe des viandes et le service à table.",
     description: [
       {
         style: "normal",
         text:
-          "Le noyer, dense et sombre, apporte une vraie présence sur la table. La rigole recueille les jus lors de la découpe d'un rôti ou d'une volaille.",
-      },
-      {
-        style: "normal",
-        text:
-          "Les poignées latérales sont sculptées dans la masse pour soulever le plateau d'une seule main, même chargé.",
+          "La rigole recueille les jus lors de la découpe d'un rôti ou d'une volaille. Les poignées latérales sont sculptées dans la masse pour soulever le plateau d'une seule main, même chargé.",
       },
     ],
     dimensions: "45 × 30 × 3 cm",
-    woodEssence: "Noyer massif",
     care,
-    inStock: true,
     featured: true,
+    variants: withVariants(95, [variant("noyer"), variant("chene")]),
   },
   {
     id: "planche-apero",
-    slug: "planche-apero-merisier",
-    title: "Planche Apéro — Merisier",
-    price: 42,
+    slug: "planche-apero",
+    title: "Planche Apéro",
+    basePrice: 42,
     images: [
-      { url: "/placeholders/board-cherry.svg", alt: "Planche Apéro en merisier, vue de face" },
-      { url: "/placeholders/atelier.svg", alt: "Planche Apéro en merisier en situation" },
+      { url: "/placeholders/board-maple.svg", alt: "Planche Apéro, vue de face" },
+      { url: "/placeholders/atelier.svg", alt: "Planche Apéro en situation" },
     ],
     shortDescription:
-      "Petit format nomade en merisier, avec trou de suspension. Parfaite pour un apéritif à deux.",
+      "Petit format nomade avec trou de suspension. Parfaite pour un apéritif à deux.",
     description: [
       {
         style: "normal",
         text:
-          "Le merisier prend une teinte miel qui se patine joliment avec le temps. Ce petit modèle se glisse partout et se suspend à la cuisine.",
+          "Ce petit modèle se glisse partout et se suspend à la cuisine. Idéal pour découvrir une essence avant de craquer pour un plus grand format.",
       },
     ],
     dimensions: "30 × 18 × 2 cm",
-    woodEssence: "Merisier massif",
     care,
-    inStock: true,
     featured: true,
+    variants: withVariants(42, [variant("erable"), variant("noyer")]),
   },
   {
     id: "planche-comtoise",
-    slug: "planche-comtoise-olivier",
-    title: "Planche Comtoise — Olivier",
-    price: 120,
+    slug: "planche-comtoise",
+    title: "Planche Comtoise",
+    basePrice: 120,
     images: [
-      { url: "/placeholders/board-olive.svg", alt: "Planche Comtoise en olivier, vue de face" },
-      { url: "/placeholders/atelier.svg", alt: "Planche Comtoise en olivier en situation" },
+      { url: "/placeholders/board-chestnut.svg", alt: "Planche Comtoise, vue de face" },
+      { url: "/placeholders/atelier.svg", alt: "Planche Comtoise en situation" },
     ],
-    shortDescription:
-      "Pièce d'exception au veinage spectaculaire de l'olivier. Chaque planche est unique.",
+    shortDescription: "Pièce d'exception au veinage spectaculaire. Chaque planche est unique.",
     description: [
       {
         style: "normal",
         text:
-          "L'olivier offre un dessin de fibres très contrasté, presque graphique. Le bois est dur, dense, idéal pour une planche qui traverse les années.",
-      },
-      {
-        style: "normal",
-        text:
-          "Disponibilité limitée : l'olivier de cette qualité s'achète par petits lots, au gré des trouvailles.",
+          "Un dessin de fibres très contrasté, presque graphique. Disponibilité limitée : cette essence s'achète par petits lots, au gré des trouvailles.",
       },
     ],
     dimensions: "38 × 22 × 2,5 cm",
-    woodEssence: "Olivier massif",
     care,
-    inStock: false,
     featured: false,
+    variants: withVariants(120, [variant("chataignier", { inStock: false })]),
   },
   {
     id: "planche-quotidienne",
-    slug: "planche-quotidienne-hetre",
-    title: "Planche Quotidienne — Hêtre",
-    price: 49,
+    slug: "planche-quotidienne",
+    title: "Planche Quotidienne",
+    basePrice: 49,
     images: [
-      { url: "/placeholders/board-beech.svg", alt: "Planche Quotidienne en hêtre, vue de face" },
-      { url: "/placeholders/atelier.svg", alt: "Planche Quotidienne en hêtre en situation" },
+      { url: "/placeholders/board-oak.svg", alt: "Planche Quotidienne, vue de face" },
+      { url: "/placeholders/atelier.svg", alt: "Planche Quotidienne en situation" },
     ],
     shortDescription:
-      "Le hêtre clair, robuste et sobre. Un format passe-partout à prix doux pour équiper la cuisine.",
+      "Un format passe-partout à prix doux pour équiper la cuisine au quotidien.",
     description: [
       {
         style: "normal",
         text:
-          "Le hêtre est le bois de référence pour la découpe : fibres serrées, surface homogène, respectueuse du tranchant des couteaux.",
+          "Fibres serrées, surface homogène, respectueuse du tranchant des couteaux : la planche qu'on utilise tous les jours.",
       },
     ],
     dimensions: "35 × 22 × 2,5 cm",
-    woodEssence: "Hêtre massif",
     care,
-    inStock: true,
     featured: false,
+    variants: withVariants(49, [variant("erable"), variant("chene")]),
   },
   {
     id: "planche-grande-tablee",
-    slug: "planche-grande-tablee-chene",
-    title: "Planche Grande Tablée — Chêne",
-    price: 135,
+    slug: "planche-grande-tablee",
+    title: "Planche Grande Tablée",
+    basePrice: 135,
     images: [
-      { url: "/placeholders/board-oak.svg", alt: "Planche Grande Tablée en chêne, vue de face" },
-      { url: "/placeholders/atelier.svg", alt: "Planche Grande Tablée en chêne en situation" },
+      { url: "/placeholders/board-walnut.svg", alt: "Planche Grande Tablée, vue de face" },
+      { url: "/placeholders/atelier.svg", alt: "Planche Grande Tablée en situation" },
     ],
     shortDescription:
-      "Très grand plateau en chêne pour les planches à partager, les grandes tablées et les buffets.",
+      "Très grand plateau pour les planches à partager, les grandes tablées et les buffets.",
     description: [
       {
         style: "normal",
@@ -165,10 +267,9 @@ export const placeholderProducts: Product[] = [
       },
     ],
     dimensions: "55 × 32 × 3,5 cm",
-    woodEssence: "Chêne massif (France)",
     care,
-    inStock: true,
     featured: false,
+    variants: withVariants(135, [variant("chene"), variant("noyer", { inStock: false })]),
   },
 ];
 
@@ -188,7 +289,7 @@ export const placeholderSettings: SiteSettings = {
     amount: 8.9,
     freeThreshold: 150,
   },
-  workshopImageUrl: "/placeholders/atelier.svg",
+  workshopImageUrl: "/photos/atelier-trois-planches.jpg",
 };
 
 export const placeholderAbout: AboutContent = {
@@ -213,16 +314,19 @@ export const placeholderAbout: AboutContent = {
       text:
         "Une planche bien entretenue se transmet. Elle se patine, se ré-huile, se ponce à nouveau si besoin. C'est tout le contraire d'un objet jetable.",
     },
-    { style: "bullets", items: [
-      "Bois massif, sans placage ni contreplaqué",
-      "Finition à l'huile de qualité alimentaire",
-      "Fabrication artisanale en France",
-      "Chaque pièce est unique",
-    ] },
+    {
+      style: "bullets",
+      items: [
+        "Bois massif, sans placage ni contreplaqué",
+        "Finition à l'huile de qualité alimentaire",
+        "Fabrication artisanale en France",
+        "Chaque pièce est unique",
+      ],
+    },
   ],
   images: [
-    { url: "/placeholders/portrait.svg", alt: "Portrait de l'artisan (démonstration)" },
-    { url: "/placeholders/atelier.svg", alt: "L'atelier (démonstration)" },
+    { url: "/photos/planche-fromages.jpg", alt: "Planche Ma belle planche dressée avec des fromages" },
+    { url: "/photos/planche-dessert.jpg", alt: "Planche Ma belle planche utilisée pour un dressage sucré" },
   ],
 };
 
@@ -272,7 +376,7 @@ export const placeholderLegalPages: LegalPage[] = [
       {
         style: "normal",
         text:
-          "Les prix sont indiqués en euros toutes taxes comprises. La TVA n'est pas applicable, article 293 B du CGI (le cas échéant). Les frais de livraison sont indiqués avant la validation de la commande.",
+          "Les prix sont indiqués en euros toutes taxes comprises et peuvent varier selon l'essence de bois choisie. La TVA n'est pas applicable, article 293 B du CGI (le cas échéant). Les frais de livraison sont indiqués avant la validation de la commande.",
       },
       { style: "h2", text: "3. Commande et paiement" },
       {
@@ -296,7 +400,7 @@ export const placeholderLegalPages: LegalPage[] = [
       {
         style: "normal",
         text:
-          "Les produits bénéficient de la garantie légale de conformité et de la garantie contre les vices cachés. Le bois étant une matière vivante, les variations de teinte et de veinage ne constituent pas un défaut.",
+          "Les produits bénéficient de la garantie légale de conformité et de la garantie contre les vices cachés. Le bois étant une matière vivante, les variations de teinte et de veinage propres à chaque essence ne constituent pas un défaut.",
       },
       { style: "h2", text: "7. Réclamations" },
       {
@@ -328,7 +432,6 @@ export const placeholderLegalPages: LegalPage[] = [
         text:
           "Les données servent uniquement à traiter les commandes, à vous tenir informé de leur suivi et à répondre à vos messages. Elles ne sont ni vendues ni cédées à des tiers à des fins commerciales.",
       },
-      { style: "h2", text: "Sous-traitants" },
       {
         style: "bullets",
         items: [

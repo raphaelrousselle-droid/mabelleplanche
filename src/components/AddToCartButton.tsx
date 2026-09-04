@@ -3,15 +3,21 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
+import type { CartItem } from "@/components/cart/CartProvider";
 import { useCart } from "@/components/cart/CartProvider";
-import type { Product } from "@/lib/types";
 
-export function AddToCartButton({ product }: { product: Product }) {
+export function AddToCartButton({
+  item,
+  inStock,
+}: {
+  item: Omit<CartItem, "quantity">;
+  inStock: boolean;
+}) {
   const { addItem } = useCart();
   const router = useRouter();
   const [added, setAdded] = useState(false);
 
-  if (!product.inStock) {
+  if (!inStock) {
     return (
       <button
         type="button"
@@ -23,20 +29,12 @@ export function AddToCartButton({ product }: { product: Product }) {
     );
   }
 
-  const payload = {
-    productId: product.id,
-    slug: product.slug,
-    title: product.title,
-    price: product.price,
-    image: product.images[0]?.url,
-  };
-
   return (
     <div className="flex flex-col gap-3 sm:flex-row">
       <button
         type="button"
         onClick={() => {
-          addItem(payload);
+          addItem(item);
           setAdded(true);
           window.setTimeout(() => setAdded(false), 2000);
         }}
@@ -47,7 +45,7 @@ export function AddToCartButton({ product }: { product: Product }) {
       <button
         type="button"
         onClick={() => {
-          addItem(payload);
+          addItem(item);
           router.push("/panier");
         }}
         className="btn btn-ghost"

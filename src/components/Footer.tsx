@@ -25,6 +25,7 @@ export async function Footer() {
             </p>
             <ul className="space-y-2.5 text-foret-clair/85">
               <li><Link href="/catalogue" className="link-underline">Catalogue</Link></li>
+              <li><Link href="/essences" className="link-underline">Les essences</Link></li>
               <li><Link href="/a-propos" className="link-underline">L&apos;atelier</Link></li>
               <li><Link href="/contact" className="link-underline">Contact</Link></li>
             </ul>
