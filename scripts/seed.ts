@@ -113,22 +113,16 @@ async function imageArray(images: { url: string; alt: string }[]) {
   return out;
 }
 
-/** Une image de démonstration par essence, pour illustrer la page /essences. */
-const essencePlaceholderImage: Record<string, string> = {
-  chene: "/placeholders/board-oak.svg",
-  noyer: "/placeholders/board-walnut.svg",
-  chataignier: "/placeholders/board-chestnut.svg",
-  hetre: "/placeholders/board-beech.svg",
-};
-
 async function run() {
   console.log("Import des images de démonstration…");
 
   // --- Essences (créées d'abord : les modèles les référencent) ---
+  // La photo de grain de chaque essence (placeholder-data.ts) est réutilisée
+  // ici pour la fiche essence ET comme photo par défaut de chaque déclinaison
+  // produit correspondante (voir imageArray(v.images) plus bas).
   const essenceDocs = [];
   for (const e of placeholderEssences) {
-    const imgPath = essencePlaceholderImage[e.slug];
-    const assetId = imgPath ? await uploadPublicImage(imgPath) : null;
+    const assetId = e.image ? await uploadPublicImage(e.image.url) : null;
     essenceDocs.push({
       // NB : un _id Sanity ne doit pas contenir de point.
       _id: e.id,

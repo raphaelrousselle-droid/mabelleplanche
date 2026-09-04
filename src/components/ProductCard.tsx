@@ -20,7 +20,7 @@ export function ProductCard({
   return (
     <Link
       href={`/planches/${product.slug}`}
-      className="group reveal flex flex-col"
+      className="group reveal hover-lift flex flex-col"
     >
       <div className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-creme">
         {cover ? (

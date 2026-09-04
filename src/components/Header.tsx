@@ -99,7 +99,7 @@ export function Header() {
               <Link
                 key={item.href}
                 href={item.href}
-                className="block border-b border-bordure/60 py-3.5 font-serif text-lg text-ecorce last:border-0"
+                className="block border-b border-bordure/60 py-3.5 font-serif text-lg text-ecorce transition-all duration-150 last:border-0 hover:pl-2 hover:text-chene"
               >
                 {item.label}
               </Link>
@@ -115,7 +115,7 @@ function CartLink({ count }: { count: number }) {
   return (
     <Link
       href="/panier"
-      className="relative inline-flex h-10 items-center gap-2 rounded-full border border-bordure px-4 text-[0.7rem] font-semibold uppercase tracking-[0.16em] text-ecorce transition-colors hover:border-ecorce hover:bg-white"
+      className="relative inline-flex h-10 items-center gap-2 rounded-full border border-bordure px-4 text-[0.7rem] font-semibold uppercase tracking-[0.16em] text-ecorce transition-all duration-200 hover:-translate-y-0.5 hover:border-ecorce hover:bg-white hover:shadow-sm"
       aria-label={`Panier${count > 0 ? ` (${count} article${count > 1 ? "s" : ""})` : " (vide)"}`}
     >
       Panier

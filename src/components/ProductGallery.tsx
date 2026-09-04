@@ -17,7 +17,7 @@ export function ProductGallery({
 
   return (
     <div className="flex flex-col gap-4 sm:flex-row-reverse">
-      <div className="relative aspect-[4/5] flex-1 overflow-hidden rounded-2xl bg-creme">
+      <div className="group relative aspect-[4/5] flex-1 overflow-hidden rounded-2xl bg-creme">
         {current && (
           <Image
             src={current.url}
@@ -25,7 +25,7 @@ export function ProductGallery({
             fill
             priority
             sizes="(max-width: 1024px) 100vw, 45vw"
-            className="object-cover"
+            className="motion-img object-cover"
           />
         )}
       </div>
@@ -39,7 +39,7 @@ export function ProductGallery({
                 onClick={() => setActive(i)}
                 aria-label={`Voir l'image ${i + 1}`}
                 aria-current={i === active}
-                className={`relative h-[4.5rem] w-[4.5rem] overflow-hidden rounded-xl bg-creme transition-all duration-200 sm:h-20 sm:w-20 ${
+                className={`relative h-[4.5rem] w-[4.5rem] overflow-hidden rounded-xl bg-creme transition-all duration-200 hover:-translate-y-0.5 sm:h-20 sm:w-20 ${
                   i === active
                     ? "ring-2 ring-ecorce ring-offset-2 ring-offset-sable"
                     : "opacity-60 hover:opacity-100"

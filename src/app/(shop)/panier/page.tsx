@@ -109,7 +109,7 @@ export default function CartPage() {
                       onClick={() =>
                         updateQuantity(item.productId, item.essenceSlug, item.quantity - 1)
                       }
-                      className="h-9 w-9 text-lg text-brou transition-colors hover:text-ecorce"
+                      className="h-9 w-9 text-lg text-brou transition-all duration-150 hover:scale-110 hover:text-ecorce"
                     >
                       −
                     </button>
@@ -122,7 +122,7 @@ export default function CartPage() {
                       onClick={() =>
                         updateQuantity(item.productId, item.essenceSlug, item.quantity + 1)
                       }
-                      className="h-9 w-9 text-lg text-brou transition-colors hover:text-ecorce"
+                      className="h-9 w-9 text-lg text-brou transition-all duration-150 hover:scale-110 hover:text-ecorce"
                     >
                       +
                     </button>

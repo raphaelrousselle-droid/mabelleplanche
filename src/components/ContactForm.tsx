@@ -5,7 +5,7 @@ import { useState } from "react";
 type Status = "idle" | "sending" | "sent" | "error";
 
 const field =
-  "w-full rounded-xl border border-bordure bg-white px-4 py-3 text-ecorce outline-none transition-colors focus:border-ecorce";
+  "w-full rounded-xl border border-bordure bg-white px-4 py-3 text-ecorce outline-none transition-all duration-200 focus:border-ecorce focus:shadow-[0_0_0_4px_rgba(176,96,59,0.12)]";
 const label = "mb-1.5 block text-[0.72rem] font-semibold uppercase tracking-[0.12em] text-brou";
 
 export function ContactForm() {
