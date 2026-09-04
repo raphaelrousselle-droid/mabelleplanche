@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" role="img" aria-label="Atelier de l'artisan (image de démonstration)">
+  <defs>
+    <linearGradient id="wall" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#efe4d1"/>
+      <stop offset="1" stop-color="#e2d2b6"/>
+    </linearGradient>
+    <linearGradient id="bench" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#b98b5c"/>
+      <stop offset="1" stop-color="#8c623b"/>
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="1000" fill="url(#wall)"/>
+  <rect x="0" y="680" width="1600" height="320" fill="url(#bench)"/>
+  <g fill="#8c623b" opacity="0.5">
+    <rect x="140" y="180" width="120" height="360" rx="10"/>
+    <rect x="300" y="180" width="120" height="360" rx="10"/>
+    <rect x="460" y="180" width="120" height="360" rx="10"/>
+  </g>
+  <g transform="translate(980 470)">
+    <rect x="-220" y="-120" width="440" height="240" rx="40" fill="#caa473"/>
+    <circle cx="0" cy="-80" r="18" fill="#efe4d1"/>
+  </g>
+  <g stroke="#5f4326" stroke-opacity="0.35" fill="none" stroke-width="4">
+    <path d="M40 760 H 1560"/>
+    <path d="M40 840 H 1560"/>
+    <path d="M40 920 H 1560"/>
+  </g>
+  <text x="800" y="120" text-anchor="middle" font-family="Georgia, serif" font-size="52" fill="#6b5f52">L'atelier — image de démonstration</text>
+</svg>

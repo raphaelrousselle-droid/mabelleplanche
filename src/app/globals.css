@@ -1,0 +1,79 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-fraunces), ui-serif, Georgia, serif;
+
+  /* Palette « chaleureux / nature » — bois clair, tons naturels */
+  --color-sable: #fbf7f0;
+  --color-creme: #f4ede1;
+  --color-ecorce: #2e2620;
+  --color-brou: #6b5f52;
+  --color-chene: #a9744f;
+  --color-chene-fonce: #8c5e3d;
+  --color-olive: #6e7250;
+  --color-bordure: #e4d9c8;
+
+  --radius-xl: 1rem;
+}
+
+:root {
+  color-scheme: light;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background-color: var(--color-sable);
+  color: var(--color-ecorce);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+/* Liens du contenu éditorial (pages légales, à propos) */
+.prose-mbp {
+  line-height: 1.7;
+}
+.prose-mbp h2 {
+  font-size: 1.5rem;
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+}
+.prose-mbp h3 {
+  font-size: 1.2rem;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+.prose-mbp p {
+  margin-bottom: 1rem;
+}
+.prose-mbp ul {
+  list-style: disc;
+  padding-left: 1.4rem;
+  margin-bottom: 1rem;
+}
+.prose-mbp a {
+  color: var(--color-chene-fonce);
+  text-decoration: underline;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
