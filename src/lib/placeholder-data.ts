@@ -19,12 +19,31 @@ const care =
   "Nourrissez le bois une fois par mois avec une huile alimentaire (huile de lin cuite ou huile minérale de qualité alimentaire). " +
   "Ne la passez jamais au lave-vaisselle et ne la laissez pas tremper.";
 
+/**
+ * Photos réelles du grain de chaque essence (macro, réutilisées comme photo
+ * de chaque déclinaison produit tant que l'artisan n'a pas ajouté ses propres
+ * photos par modèle dans le Studio).
+ *
+ * Sources : Wikimedia Commons, sous licence Creative Commons — recadrées.
+ * Voir les crédits complets en bas de la page /essences.
+ */
+const essenceGrainPhoto: Record<string, { url: string; alt: string }> = {
+  chene: { url: "/photos/essences/chene.jpg", alt: "Grain du chêne, gros plan" },
+  noyer: { url: "/photos/essences/noyer.jpg", alt: "Grain du noyer, gros plan" },
+  chataignier: {
+    url: "/photos/essences/chataignier.jpg",
+    alt: "Grain du châtaignier, coupe transversale",
+  },
+  hetre: { url: "/photos/essences/hetre.jpg", alt: "Grain du hêtre, gros plan" },
+};
+
 export const placeholderEssences: Essence[] = [
   {
     id: "essence-chene",
     slug: "chene",
     name: "Chêne",
     swatch: "#b0794f",
+    image: essenceGrainPhoto.chene,
     shortDescription:
       "Un bois dense au fil prononcé, référence intemporelle de la menuiserie française.",
     description: [
@@ -45,6 +64,7 @@ export const placeholderEssences: Essence[] = [
     slug: "noyer",
     name: "Noyer",
     swatch: "#5f3f28",
+    image: essenceGrainPhoto.noyer,
     shortDescription:
       "Un bois sombre et élégant, au grain fin, qui se patine magnifiquement avec le temps.",
     description: [
@@ -65,6 +85,7 @@ export const placeholderEssences: Essence[] = [
     slug: "chataignier",
     name: "Châtaignier",
     swatch: "#a97a3f",
+    image: essenceGrainPhoto.chataignier,
     shortDescription:
       "Proche du chêne en résistance, plus léger, naturellement peu sensible à l'humidité.",
     description: [
@@ -85,6 +106,7 @@ export const placeholderEssences: Essence[] = [
     slug: "hetre",
     name: "Hêtre",
     swatch: "#e3c9a0",
+    image: essenceGrainPhoto.hetre,
     shortDescription:
       "Un bois clair à grain très serré, classique des planches à découper françaises.",
     description: [
@@ -119,7 +141,7 @@ function variant(
     essenceName: e.name,
     swatch: e.swatch,
     inStock: opts.inStock ?? true,
-    images: opts.images ?? [],
+    images: opts.images ?? (essenceGrainPhoto[e.slug] ? [essenceGrainPhoto[e.slug]] : []),
     price: opts.price,
   };
 }
@@ -135,7 +157,6 @@ export const placeholderProducts: Product[] = [
     title: "Planche Bistrot",
     basePrice: 69,
     images: [
-      { url: "/placeholders/board-oak.svg", alt: "Planche Bistrot, vue de face" },
       { url: "/placeholders/atelier.svg", alt: "Planche Bistrot en situation dans l'atelier" },
     ],
     shortDescription:
@@ -163,7 +184,6 @@ export const placeholderProducts: Product[] = [
     title: "Planche de Service",
     basePrice: 95,
     images: [
-      { url: "/placeholders/board-walnut.svg", alt: "Planche de Service, vue de face" },
       { url: "/placeholders/atelier.svg", alt: "Planche de Service en situation" },
     ],
     shortDescription:
@@ -186,7 +206,6 @@ export const placeholderProducts: Product[] = [
     title: "Planche Apéro",
     basePrice: 42,
     images: [
-      { url: "/placeholders/board-beech.svg", alt: "Planche Apéro, vue de face" },
       { url: "/placeholders/atelier.svg", alt: "Planche Apéro en situation" },
     ],
     shortDescription:
@@ -209,7 +228,6 @@ export const placeholderProducts: Product[] = [
     title: "Planche Comtoise",
     basePrice: 120,
     images: [
-      { url: "/placeholders/board-chestnut.svg", alt: "Planche Comtoise, vue de face" },
       { url: "/placeholders/atelier.svg", alt: "Planche Comtoise en situation" },
     ],
     shortDescription: "Pièce d'exception au veinage spectaculaire. Chaque planche est unique.",
@@ -231,7 +249,6 @@ export const placeholderProducts: Product[] = [
     title: "Planche Quotidienne",
     basePrice: 49,
     images: [
-      { url: "/placeholders/board-oak.svg", alt: "Planche Quotidienne, vue de face" },
       { url: "/placeholders/atelier.svg", alt: "Planche Quotidienne en situation" },
     ],
     shortDescription:
@@ -254,7 +271,6 @@ export const placeholderProducts: Product[] = [
     title: "Planche Grande Tablée",
     basePrice: 135,
     images: [
-      { url: "/placeholders/board-walnut.svg", alt: "Planche Grande Tablée, vue de face" },
       { url: "/placeholders/atelier.svg", alt: "Planche Grande Tablée en situation" },
     ],
     shortDescription:

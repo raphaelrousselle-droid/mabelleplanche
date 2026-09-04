@@ -26,13 +26,13 @@ export default async function EssencesPage() {
             un choix de teinte, de caractère et de densité.
           </p>
         </div>
-        <div className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-creme">
+        <div className="group relative aspect-[4/5] overflow-hidden rounded-2xl bg-creme">
           <Image
             src="/photos/detail-gravure.jpg"
             alt="Détail de la marque Ma belle planche gravée sur une planche"
             fill
             sizes="(max-width: 1024px) 100vw, 40vw"
-            className="object-cover"
+            className="motion-img object-cover"
           />
         </div>
       </section>
@@ -45,7 +45,7 @@ export default async function EssencesPage() {
             className="reveal grid scroll-mt-28 gap-8 py-14 lg:grid-cols-[0.9fr_1.1fr] lg:gap-14"
           >
             <div
-              className={`relative aspect-[4/3] overflow-hidden rounded-2xl ${
+              className={`group relative aspect-[4/3] overflow-hidden rounded-2xl ${
                 i % 2 === 1 ? "lg:order-2" : ""
               }`}
               style={{ backgroundColor: essence.image ? undefined : essence.swatch }}
@@ -56,7 +56,7 @@ export default async function EssencesPage() {
                   alt={essence.image.alt || essence.name}
                   fill
                   sizes="(max-width: 1024px) 100vw, 45vw"
-                  className="object-cover"
+                  className="motion-img object-cover"
                 />
               ) : (
                 <span className="absolute inset-0 grid place-items-center font-serif text-xl text-ecorce/60">
@@ -103,6 +103,46 @@ export default async function EssencesPage() {
           </Link>
         </div>
       </section>
+
+      <p className="wrap py-6 text-center text-xs text-brou/70">
+        Photos de grain :{" "}
+        <a
+          href="https://commons.wikimedia.org/wiki/File:Parquet_massif_ch%C3%AAne_rustique_chanfrein%C3%A9.jpg"
+          className="link-underline"
+          target="_blank"
+          rel="noreferrer"
+        >
+          chêne (DocteurCosmos, CC BY 3.0)
+        </a>
+        {" · "}
+        <a
+          href="https://commons.wikimedia.org/wiki/File:Texture_de_noyer.jpg"
+          className="link-underline"
+          target="_blank"
+          rel="noreferrer"
+        >
+          noyer (Cyril5555, CC BY-SA 3.0)
+        </a>
+        {" · "}
+        <a
+          href="https://commons.wikimedia.org/wiki/File:Przekr%C3%B3j_Castanea_sativa_Kasztan_jadalny_OB_UWr_2023-07-21_01.jpg"
+          className="link-underline"
+          target="_blank"
+          rel="noreferrer"
+        >
+          châtaignier (Agnieszka Kwiecień, CC BY-SA 4.0)
+        </a>
+        {" · "}
+        <a
+          href="https://commons.wikimedia.org/wiki/File:Wood_Fagus_silvatica.jpg"
+          className="link-underline"
+          target="_blank"
+          rel="noreferrer"
+        >
+          hêtre (Achim Raschka, CC BY-SA 3.0)
+        </a>
+        {" — Wikimedia Commons, images recadrées."}
+      </p>
     </div>
   );
 }

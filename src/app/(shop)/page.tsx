@@ -57,7 +57,7 @@ export default async function HomePage() {
         </div>
 
         <div className="relative">
-          <div className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-creme">
+          <div className="group relative aspect-[4/5] overflow-hidden rounded-2xl bg-creme">
             {settings.workshopImageUrl && (
               <Image
                 src={settings.workshopImageUrl}
@@ -65,7 +65,7 @@ export default async function HomePage() {
                 fill
                 priority
                 sizes="(max-width: 1024px) 100vw, 45vw"
-                className="object-cover"
+                className="motion-img object-cover"
               />
             )}
           </div>
@@ -136,7 +136,7 @@ export default async function HomePage() {
                   <Link
                     key={e.slug}
                     href={`/essences#${e.slug}`}
-                    className="inline-flex items-center gap-2 rounded-full border border-foret-clair/25 px-3.5 py-1.5 text-sm text-foret-clair/85 transition-colors hover:border-foret-clair/60"
+                    className="inline-flex items-center gap-2 rounded-full border border-foret-clair/25 px-3.5 py-1.5 text-sm text-foret-clair/85 transition-all duration-200 hover:-translate-y-0.5 hover:border-foret-clair/60 hover:bg-foret-clair/10"
                   >
                     <span
                       className="h-2.5 w-2.5 rounded-full border border-white/20"

@@ -40,13 +40,13 @@ export default async function AboutPage() {
           <p className="mt-6 max-w-lg text-lg text-brou">{about.intro}</p>
         </div>
         {about.images[0] && (
-          <div className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-creme">
+          <div className="group relative aspect-[4/5] overflow-hidden rounded-2xl bg-creme">
             <Image
               src={about.images[0].url}
               alt={about.images[0].alt || about.title}
               fill
               sizes="(max-width: 1024px) 100vw, 40vw"
-              className="object-cover"
+              className="motion-img object-cover"
             />
           </div>
         )}
@@ -72,13 +72,13 @@ export default async function AboutPage() {
 
       {about.images[1] && (
         <section className="wrap pb-4">
-          <div className="relative aspect-[16/10] overflow-hidden rounded-2xl bg-creme">
+          <div className="group relative aspect-[16/10] overflow-hidden rounded-2xl bg-creme">
             <Image
               src={about.images[1].url}
               alt={about.images[1].alt || about.title}
               fill
               sizes="(max-width: 1024px) 100vw, 1024px"
-              className="object-cover"
+              className="motion-img object-cover"
             />
           </div>
         </section>

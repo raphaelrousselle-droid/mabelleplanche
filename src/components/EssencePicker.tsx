@@ -33,14 +33,14 @@ export function EssencePicker({
               aria-pressed={active}
               aria-label={`${v.essenceName}${v.inStock ? "" : " (épuisé)"}`}
               title={`${v.essenceName}${v.inStock ? "" : " — épuisé"}`}
-              className={`relative flex h-11 w-11 items-center justify-center rounded-full border-2 transition-all duration-150 ${
+              className={`group relative flex h-11 w-11 items-center justify-center rounded-full border-2 transition-all duration-200 hover:-translate-y-0.5 ${
                 active
                   ? "border-ecorce"
                   : "border-transparent hover:border-bordure"
               }`}
             >
               <span
-                className="h-8 w-8 rounded-full border border-black/10"
+                className="h-8 w-8 rounded-full border border-black/10 transition-transform duration-200 group-hover:scale-110"
                 style={{ backgroundColor: v.swatch }}
               />
               {!v.inStock && (
