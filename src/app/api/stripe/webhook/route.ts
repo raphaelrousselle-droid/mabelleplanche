@@ -96,7 +96,7 @@ async function handleCompletedCheckout(sessionId: string) {
 
   // Email client
   if (customerEmail) {
-    await resend.emails.send({
+    const { error } = await resend.emails.send({
       from: FROM_EMAIL,
       to: customerEmail,
       subject: `Votre commande Ma belle planche (${orderRef})`,
@@ -109,11 +109,12 @@ async function handleCompletedCheckout(sessionId: string) {
         shippingAddress,
       }),
     });
+    if (error) console.error("[webhook] Resend (client) a refusé l'envoi", error);
   }
 
   // Notification artisan
   if (NOTIFICATION_EMAIL) {
-    await resend.emails.send({
+    const { error } = await resend.emails.send({
       from: FROM_EMAIL,
       to: NOTIFICATION_EMAIL,
       replyTo: customerEmail || undefined,
@@ -130,5 +131,6 @@ async function handleCompletedCheckout(sessionId: string) {
         ...(shippingAddress ?? ["—"]),
       ].join("\n"),
     });
+    if (error) console.error("[webhook] Resend (artisan) a refusé l'envoi", error);
   }
 }
