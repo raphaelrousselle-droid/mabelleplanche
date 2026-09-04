@@ -8,7 +8,7 @@ import { getEssences } from "@/lib/store";
 export const metadata: Metadata = {
   title: "Les essences",
   description:
-    "Chêne, noyer, châtaignier, érable : les essences de bois travaillées par l'atelier Ma belle planche, et ce qu'elles apportent à chaque planche.",
+    "Chêne, noyer, châtaignier, hêtre : les essences de bois travaillées par l'atelier Ma belle planche, et ce qu'elles apportent à chaque planche.",
 };
 
 export default async function EssencesPage() {

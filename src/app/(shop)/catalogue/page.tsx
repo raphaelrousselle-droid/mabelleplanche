@@ -6,7 +6,7 @@ import { getProducts } from "@/lib/store";
 export const metadata: Metadata = {
   title: "Catalogue",
   description:
-    "Toutes les planches à découper Ma belle planche : chêne, noyer, merisier, olivier, hêtre. Bois massif, fabrication artisanale.",
+    "Toutes les planches à découper Ma belle planche : chêne, noyer, châtaignier, hêtre. Bois massif, fabrication artisanale.",
 };
 
 export default async function CataloguePage() {
