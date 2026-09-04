@@ -2,44 +2,61 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { PriceTag } from "@/components/PriceTag";
-import { StockBadge } from "@/components/StockBadge";
 import type { Product } from "@/lib/types";
 
-export function ProductCard({ product }: { product: Product }) {
+export function ProductCard({
+  product,
+  index,
+}: {
+  product: Product;
+  index?: number;
+}) {
   const cover = product.images[0];
 
   return (
     <Link
       href={`/planches/${product.slug}`}
-      className="group flex flex-col overflow-hidden rounded-xl border border-bordure bg-white transition-shadow hover:shadow-md"
+      className="group reveal flex flex-col"
     >
-      <div className="relative aspect-square overflow-hidden bg-creme">
-        {cover && (
+      <div className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-creme">
+        {cover ? (
           <Image
             src={cover.url}
             alt={cover.alt || product.title}
             fill
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-            className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+            sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 30vw"
+            className="object-cover transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04]"
           />
-        )}
-        {!product.inStock && (
-          <span className="absolute left-3 top-3">
-            <StockBadge inStock={false} />
+        ) : (
+          <span className="absolute inset-0 grid place-items-center font-serif text-brou/50">
+            {product.woodEssence}
           </span>
         )}
+
+        {typeof index === "number" && (
+          <span className="absolute left-4 top-4 font-serif text-sm text-ecorce/45">
+            {String(index + 1).padStart(2, "0")}
+          </span>
+        )}
+
+        {!product.inStock && (
+          <span className="absolute right-4 top-4 rounded-full bg-sable/95 px-3 py-1 text-[0.62rem] font-semibold uppercase tracking-[0.14em] text-brou">
+            Épuisé
+          </span>
+        )}
+
+        <span className="pointer-events-none absolute inset-x-4 bottom-4 flex translate-y-2 items-center justify-center rounded-full bg-ecorce/90 py-2.5 text-[0.7rem] font-semibold uppercase tracking-[0.16em] text-sable opacity-0 backdrop-blur-sm transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+          Voir la planche
+        </span>
       </div>
 
-      <div className="flex flex-1 flex-col gap-2 p-4">
+      <div className="mt-4 flex items-baseline justify-between gap-3">
         <h3 className="font-serif text-lg text-ecorce">{product.title}</h3>
-        <p className="line-clamp-2 flex-1 text-sm text-brou">
-          {product.shortDescription}
-        </p>
-        <div className="mt-1 flex items-center justify-between">
-          <PriceTag amount={product.price} className="text-lg text-ecorce" />
-          <span className="text-sm text-chene group-hover:underline">Voir</span>
-        </div>
+        <PriceTag amount={product.price} className="text-base text-brou" />
       </div>
+      <p className="mt-1 line-clamp-2 text-sm text-brou/85">
+        {product.shortDescription}
+      </p>
     </Link>
   );
 }

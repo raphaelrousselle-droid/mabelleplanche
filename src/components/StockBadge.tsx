@@ -1,17 +1,23 @@
-export function StockBadge({ inStock }: { inStock: boolean }) {
+export function StockBadge({
+  inStock,
+  className = "",
+}: {
+  inStock: boolean;
+  className?: string;
+}) {
   return (
     <span
-      className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium ${
-        inStock
-          ? "bg-olive/15 text-olive"
-          : "bg-ecorce/10 text-brou"
-      }`}
+      className={`inline-flex items-center gap-2 text-[0.68rem] font-semibold uppercase tracking-[0.14em] ${
+        inStock ? "text-olive" : "text-brou"
+      } ${className}`}
     >
       <span
         aria-hidden
-        className={`h-1.5 w-1.5 rounded-full ${inStock ? "bg-olive" : "bg-brou"}`}
+        className={`h-1.5 w-1.5 rounded-full ${
+          inStock ? "bg-olive" : "bg-brou/60"
+        }`}
       />
-      {inStock ? "En stock" : "Épuisé"}
+      {inStock ? "Disponible" : "Épuisé"}
     </span>
   );
 }

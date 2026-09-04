@@ -18,12 +18,15 @@ export async function LegalPageView({ slug }: { slug: LegalPageSlug }) {
       });
 
   return (
-    <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6">
-      <h1 className="text-3xl text-ecorce sm:text-4xl">{page.title}</h1>
+    <div className="wrap-tight py-14 lg:py-20">
+      <p className="eyebrow">Informations</p>
+      <h1 className="headline mt-4">{page.title}</h1>
       {updatedLabel && (
-        <p className="mt-2 text-sm text-brou">Dernière mise à jour : {updatedLabel}</p>
+        <p className="mt-3 text-sm text-brou">
+          Dernière mise à jour : {updatedLabel}
+        </p>
       )}
-      <div className="mt-8">
+      <div className="mt-10">
         <RichText blocks={page.body} />
       </div>
     </div>

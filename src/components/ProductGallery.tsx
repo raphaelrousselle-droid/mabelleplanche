@@ -16,22 +16,22 @@ export function ProductGallery({
   const current = images[active] ?? images[0];
 
   return (
-    <div className="flex flex-col gap-3">
-      <div className="relative aspect-square overflow-hidden rounded-xl border border-bordure bg-creme">
+    <div className="flex flex-col gap-4 sm:flex-row-reverse">
+      <div className="relative aspect-[4/5] flex-1 overflow-hidden rounded-2xl bg-creme">
         {current && (
           <Image
             src={current.url}
             alt={current.alt || title}
             fill
             priority
-            sizes="(max-width: 1024px) 100vw, 50vw"
+            sizes="(max-width: 1024px) 100vw, 45vw"
             className="object-cover"
           />
         )}
       </div>
 
       {images.length > 1 && (
-        <ul className="flex flex-wrap gap-3">
+        <ul className="flex gap-3 sm:flex-col">
           {images.map((img, i) => (
             <li key={img.url + i}>
               <button
@@ -39,8 +39,10 @@ export function ProductGallery({
                 onClick={() => setActive(i)}
                 aria-label={`Voir l'image ${i + 1}`}
                 aria-current={i === active}
-                className={`relative h-16 w-16 overflow-hidden rounded-lg border-2 bg-creme transition-colors sm:h-20 sm:w-20 ${
-                  i === active ? "border-chene" : "border-bordure hover:border-brou"
+                className={`relative h-[4.5rem] w-[4.5rem] overflow-hidden rounded-xl bg-creme transition-all duration-200 sm:h-20 sm:w-20 ${
+                  i === active
+                    ? "ring-2 ring-ecorce ring-offset-2 ring-offset-sable"
+                    : "opacity-60 hover:opacity-100"
                 }`}
               >
                 <Image
