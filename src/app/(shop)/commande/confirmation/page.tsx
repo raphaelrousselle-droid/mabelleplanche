@@ -44,15 +44,13 @@ export default async function ConfirmationPage({
   }
 
   return (
-    <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6">
+    <div className="wrap-tight py-20">
       <ClearCartOnMount />
 
-      <div className="rounded-xl border border-bordure bg-white p-8 text-center">
-        <p className="text-4xl" aria-hidden>
-          🌿
-        </p>
-        <h1 className="mt-4 text-3xl text-ecorce">Merci pour votre commande</h1>
-        <p className="mt-3 text-brou">
+      <div className="rounded-2xl border border-bordure bg-white p-8 text-center sm:p-12">
+        <p className="eyebrow">Commande confirmée</p>
+        <h1 className="headline mt-4">Merci pour votre commande</h1>
+        <p className="mt-4 text-brou">
           {paid
             ? "Votre paiement a bien été reçu."
             : "Votre commande a été enregistrée."}{" "}
@@ -66,8 +64,8 @@ export default async function ConfirmationPage({
         </p>
 
         {lineItems.length > 0 && (
-          <div className="mt-8 text-left">
-            <h2 className="text-sm font-semibold uppercase tracking-wide text-brou">
+          <div className="mt-10 text-left">
+            <h2 className="text-[0.72rem] font-semibold uppercase tracking-[0.14em] text-brou">
               Récapitulatif
             </h2>
             <ul className="mt-3 divide-y divide-bordure border-y border-bordure">
@@ -92,10 +90,7 @@ export default async function ConfirmationPage({
           </div>
         )}
 
-        <Link
-          href="/catalogue"
-          className="mt-8 inline-block rounded-lg bg-chene px-6 py-3 font-medium text-white hover:bg-chene-fonce"
-        >
+        <Link href="/catalogue" className="btn btn-primary mt-10">
           Retour au catalogue
         </Link>
       </div>

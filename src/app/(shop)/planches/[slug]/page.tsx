@@ -45,59 +45,70 @@ export default async function ProductPage({
   if (!product) notFound();
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-12">
-      <nav className="mb-6 text-sm text-brou">
-        <Link href="/catalogue" className="hover:text-chene">
-          ← Retour au catalogue
+    <div className="wrap py-8 sm:py-12">
+      <nav className="mb-8 text-[0.72rem] font-semibold uppercase tracking-[0.14em] text-brou">
+        <Link href="/catalogue" className="link-underline">
+          ← Catalogue
         </Link>
       </nav>
 
-      <div className="grid gap-8 lg:grid-cols-2 lg:gap-12">
+      <div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
         <ProductGallery images={product.images} title={product.title} />
 
-        <div>
-          <div className="flex items-start justify-between gap-4">
-            <h1 className="text-3xl text-ecorce sm:text-4xl">{product.title}</h1>
+        <div className="lg:pt-4">
+          <div className="lg:sticky lg:top-28">
             <StockBadge inStock={product.inStock} />
-          </div>
+            <h1 className="mt-4 text-3xl text-ecorce sm:text-4xl">
+              {product.title}
+            </h1>
 
-          <PriceTag
-            amount={product.price}
-            className="mt-4 block text-2xl text-ecorce"
-          />
-          <p className="mt-1 text-xs text-brou">
-            Prix TTC · Livraison en France en supplément
-          </p>
-
-          <p className="mt-6 text-brou">{product.shortDescription}</p>
-
-          <div className="mt-6">
-            <AddToCartButton product={product} />
-          </div>
-
-          <dl className="mt-8 divide-y divide-bordure border-y border-bordure text-sm">
-            <div className="flex justify-between gap-4 py-3">
-              <dt className="text-brou">Dimensions</dt>
-              <dd className="text-right text-ecorce">{product.dimensions}</dd>
+            <div className="mt-4 flex items-baseline gap-3">
+              <PriceTag amount={product.price} className="text-2xl text-ecorce" />
+              <span className="text-xs uppercase tracking-[0.14em] text-brou/70">
+                TTC · port en sus
+              </span>
             </div>
-            <div className="flex justify-between gap-4 py-3">
-              <dt className="text-brou">Essence de bois</dt>
-              <dd className="text-right text-ecorce">{product.woodEssence}</dd>
-            </div>
-          </dl>
 
-          {product.description.length > 0 && (
-            <div className="mt-8">
-              <h2 className="text-lg text-ecorce">Description</h2>
-              <div className="mt-2">
-                <RichText blocks={product.description} />
+            <p className="mt-6 text-brou">{product.shortDescription}</p>
+
+            <div className="mt-7">
+              <AddToCartButton product={product} />
+            </div>
+
+            <dl className="mt-9 space-y-0 border-t border-bordure text-sm">
+              <div className="flex justify-between gap-4 border-b border-bordure py-3.5">
+                <dt className="text-[0.72rem] font-semibold uppercase tracking-[0.12em] text-brou">
+                  Dimensions
+                </dt>
+                <dd className="text-right text-ecorce">{product.dimensions}</dd>
               </div>
-            </div>
-          )}
+              <div className="flex justify-between gap-4 border-b border-bordure py-3.5">
+                <dt className="text-[0.72rem] font-semibold uppercase tracking-[0.12em] text-brou">
+                  Essence
+                </dt>
+                <dd className="text-right text-ecorce">{product.woodEssence}</dd>
+              </div>
+            </dl>
 
-          <div className="mt-8">
-            <h2 className="text-lg text-ecorce">Entretien</h2>
-            <p className="mt-2 text-sm leading-relaxed text-brou">{product.care}</p>
+            {product.description.length > 0 && (
+              <div className="mt-8">
+                <h2 className="text-[0.72rem] font-semibold uppercase tracking-[0.14em] text-brou">
+                  Description
+                </h2>
+                <div className="mt-3">
+                  <RichText blocks={product.description} />
+                </div>
+              </div>
+            )}
+
+            <div className="mt-8">
+              <h2 className="text-[0.72rem] font-semibold uppercase tracking-[0.14em] text-brou">
+                Entretien
+              </h2>
+              <p className="mt-3 text-sm leading-relaxed text-brou">
+                {product.care}
+              </p>
+            </div>
           </div>
         </div>
       </div>
