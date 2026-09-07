@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-import { ProductCard } from "@/components/ProductCard";
+import { ProductListRow } from "@/components/ProductListRow";
 import { getProducts } from "@/lib/store";
 
 export const metadata: Metadata = {
@@ -42,11 +42,13 @@ export default async function CataloguePage() {
         <p className="mt-12 text-brou">Aucune planche disponible pour le moment.</p>
       ) : (
         <>
-          <div className="mt-12 grid grid-cols-1 gap-y-12 sm:max-w-md">
+          <ul className="mt-12 divide-y divide-bordure border-y border-bordure">
             {available.map((product, i) => (
-              <ProductCard key={product.id} product={product} index={i} />
+              <li key={product.id}>
+                <ProductListRow product={product} index={i} />
+              </li>
             ))}
-          </div>
+          </ul>
 
           {soldOut.length > 0 && (
             <section className="mt-20">
@@ -57,11 +59,13 @@ export default async function CataloguePage() {
                   prévenu du prochain lot.
                 </p>
               </div>
-              <div className="mt-10 grid grid-cols-1 gap-y-12 opacity-70 sm:max-w-md">
+              <ul className="mt-10 divide-y divide-bordure border-y border-bordure opacity-70">
                 {soldOut.map((product) => (
-                  <ProductCard key={product.id} product={product} />
+                  <li key={product.id}>
+                    <ProductListRow product={product} />
+                  </li>
                 ))}
-              </div>
+              </ul>
             </section>
           )}
         </>
