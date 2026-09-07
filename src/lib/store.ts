@@ -78,7 +78,7 @@ function fallbackIfEmpty<T>(data: T[] | null | undefined, fallback: T[], label: 
   if (!data || data.length === 0) {
     if (isSanityConfigured) {
       console.warn(
-        `[store] Sanity ne renvoie aucun résultat pour « ${label} » : utilisation des données de démonstration. Lancez « npm run seed » ou ajoutez du contenu dans /studio.`,
+        `[store] Sanity ne renvoie aucun résultat pour « ${label} » : utilisation des données de démonstration. Lancez « npm run seed » ou ajoutez du contenu dans le Studio (studio-mabelleplanche/).`,
       );
     }
     return fallback;

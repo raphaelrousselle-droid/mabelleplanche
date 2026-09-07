@@ -7,7 +7,7 @@
  *
  * Les photos de démonstration (SVG dans /public/placeholders, photos réelles
  * de l'atelier dans /public/photos) sont importées pour que la boutique soit
- * présentable immédiatement. Remplacez-les depuis le Studio (/studio).
+ * présentable immédiatement. Remplacez-les depuis le Studio (studio-mabelleplanche/).
  * Relancer le script met à jour les documents de démo (mêmes _id) sans
  * toucher à ce que vous avez ajouté à la main.
  */
@@ -238,7 +238,7 @@ async function run() {
   console.log(
     `Seed terminé : ${count} documents créés/mis à jour dans « ${dataset} ».`,
   );
-  console.log("→ Ouvrez /studio pour remplacer les images et textes de démonstration.");
+  console.log("→ Ouvrez le Studio (studio-mabelleplanche/, npm run dev) pour remplacer les images et textes de démonstration.");
 }
 
 run().catch((err) => {

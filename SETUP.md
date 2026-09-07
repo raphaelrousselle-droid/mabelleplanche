@@ -33,32 +33,68 @@ Environment Variables**.
 
 ## 1. Sanity (catalogue et contenu)
 
+Le Studio d'administration est un projet **séparé**, `studio-mabelleplanche/`,
+situé à côté de ce dossier d'application (pas embarqué dans le site).
+
 1. Créer un compte sur [sanity.io](https://www.sanity.io) (gratuit).
-2. Depuis le dossier du projet :
+2. Depuis `studio-mabelleplanche/` :
    ```bash
    npx sanity@latest login
-   npx sanity@latest init --env
+   npm run dev
    ```
-   Choisir « Create new project », nom « Ma belle planche », dataset
-   `production`. La commande écrit `NEXT_PUBLIC_SANITY_PROJECT_ID` dans
-   `.env.local`.
+   Le Studio tourne sur `http://localhost:3333` (projet `66mqy86e`, dataset
+   `production`).
 3. Créer deux tokens dans **manage.sanity.io → API → Tokens** :
-   - un token **Viewer** → `SANITY_API_READ_TOKEN`
-   - un token **Editor** → `SANITY_API_WRITE_TOKEN`
-4. Charger les données de démonstration :
+   - un token **Viewer** → `SANITY_API_READ_TOKEN` (dans `.env.local` de
+     l'app)
+   - un token **Editor** → `SANITY_API_WRITE_TOKEN` (idem)
+4. Depuis le dossier de l'app, charger les données de démonstration :
    ```bash
    npm run seed
    ```
-5. Ouvrir `http://localhost:3000/studio`, se connecter, puis :
+5. Dans le Studio (`http://localhost:3333`), se connecter, puis :
    - remplacer les textes,
    - **ajouter les photos** de chaque planche (le seed n'importe pas d'images),
    - compléter **Réglages du site** (SIRET, adresse, hébergeur, frais de port…),
    - relire les **Pages légales**.
 6. Dans **manage.sanity.io → API → CORS origins**, ajouter
-   `http://localhost:3000` et `https://mabelleplanche.fr` (Allow credentials).
+   `http://localhost:3000` (l'app) et `https://mabelleplanche.fr` (Allow
+   credentials). Le Studio en local (`localhost:3333`) n'a pas besoin d'entrée
+   CORS séparée.
+7. Déployer le Studio pour y accéder en dehors du poste local (optionnel) :
+   ```bash
+   cd studio-mabelleplanche
+   npx sanity deploy
+   ```
+   Publié sur `https://mabelleplanche.sanity.studio`.
 
 Gérer le stock au quotidien : dans le Studio, ouvrir une planche et cocher /
 décocher **En stock**.
+
+### ⚠️ Studio hébergé bloqué en local — solution de contournement en place
+
+Le Studio déployé (`https://mabelleplanche.sanity.studio`) charge son code
+depuis `sanity-cdn.com` à chaque ouverture. Sur ce poste, ce domaine renvoie
+`ERR_CONNECTION_RESET` (pare-feu / proxy / extension à identifier), donc la
+page reste bloquée sur un écran vide.
+
+En attendant, le Studio tourne **en local dans le Codespace** (ne dépend pas
+de `sanity-cdn.com`, seulement de `api.sanity.io`) :
+
+```bash
+cd studio-mabelleplanche
+npx sanity dev --port 3333 --host 0.0.0.0
+```
+
+Accessible via le port forwarding du Codespace, onglet **Ports** de VS Code
+(port 3333) — ou directement `https://<nom-du-codespace>-3333.app.github.dev`.
+Ce serveur s'arrête si le Codespace redémarre : relancer la commande
+ci-dessus le cas échéant.
+
+À faire quand possible : identifier ce qui bloque `sanity-cdn.com` (tester en
+navigation privée avec extensions désactivées, tester sur un autre réseau)
+pour pouvoir revenir au Studio hébergé, accessible de partout sans dépendre du
+Codespace.
 
 ---
 

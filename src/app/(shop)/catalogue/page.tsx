@@ -9,11 +9,22 @@ export const metadata: Metadata = {
     "Toutes les planches à découper Ma belle planche : chêne, noyer, châtaignier, hêtre. Bois massif, fabrication artisanale.",
 };
 
+function minPrice(product: { basePrice: number; variants: { price: number }[] }) {
+  return Math.min(product.basePrice, ...product.variants.map((v) => v.price));
+}
+
+function byPriceAscending(
+  a: { basePrice: number; variants: { price: number }[] },
+  b: { basePrice: number; variants: { price: number }[] },
+) {
+  return minPrice(a) - minPrice(b);
+}
+
 export default async function CataloguePage() {
   const products = await getProducts();
   const inStock = (p: (typeof products)[number]) => p.variants.some((v) => v.inStock);
-  const available = products.filter(inStock);
-  const soldOut = products.filter((p) => !inStock(p));
+  const available = products.filter(inStock).sort(byPriceAscending);
+  const soldOut = products.filter((p) => !inStock(p)).sort(byPriceAscending);
 
   return (
     <div className="wrap py-14 lg:py-20">
@@ -31,7 +42,7 @@ export default async function CataloguePage() {
         <p className="mt-12 text-brou">Aucune planche disponible pour le moment.</p>
       ) : (
         <>
-          <div className="mt-12 grid gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-12 grid grid-cols-1 gap-y-12 sm:max-w-md">
             {available.map((product, i) => (
               <ProductCard key={product.id} product={product} index={i} />
             ))}
@@ -46,7 +57,7 @@ export default async function CataloguePage() {
                   prévenu du prochain lot.
                 </p>
               </div>
-              <div className="mt-10 grid gap-x-6 gap-y-12 opacity-70 sm:grid-cols-2 lg:grid-cols-3">
+              <div className="mt-10 grid grid-cols-1 gap-y-12 opacity-70 sm:max-w-md">
                 {soldOut.map((product) => (
                   <ProductCard key={product.id} product={product} />
                 ))}

@@ -30,7 +30,6 @@ projet Sanity est renseigné, le contenu vient du CMS.
 src/
   app/
     (shop)/            Pages publiques (accueil, catalogue, fiche, panier, ...)
-    studio/            Sanity Studio, servi sur /studio
     api/
       checkout/        Crée la session Stripe Checkout
       stripe/webhook/  Reçoit checkout.session.completed -> emails Resend
@@ -42,8 +41,11 @@ src/
     sanity/            Client, requêtes GROQ, conversion Portable Text
     email/             Client Resend + gabarits d'emails
     stripe.ts          Client Stripe (serveur)
-  sanity/schemaTypes/  Modèle de contenu (product, siteSettings, aboutPage, legalPage)
 ```
+
+Le Sanity Studio (modèle de contenu, administration) est un projet séparé,
+`studio-mabelleplanche/`, à côté de ce dossier — pas embarqué dans le site
+(voir `SETUP.md`).
 
 ## Mise en production
 

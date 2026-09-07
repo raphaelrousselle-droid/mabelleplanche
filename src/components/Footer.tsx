@@ -55,7 +55,7 @@ export async function Footer() {
 
         <div className="mt-14 flex flex-col gap-2 border-t border-foret-clair/15 pt-6 text-xs text-foret-clair/55 sm:flex-row sm:items-center sm:justify-between">
           <span>© {year} {settings.companyName}</span>
-          <span>Livraison en France métropolitaine · Paiement sécurisé Stripe</span>
+          <span>Livraison en France métropolitaine · Paiement sécurisé Stripe · Emballages 100 % recyclables</span>
         </div>
       </div>
     </footer>
